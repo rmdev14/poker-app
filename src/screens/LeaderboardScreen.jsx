@@ -356,6 +356,7 @@ function LeaderboardScreen() {
 
         {/* Leaderboard Table */}
         <div className="leaderboard-table">
+          <p className="leaderboard-hint">Tap player name for detailed stats</p>
           <div className="leaderboard-header">
             <span className="col-rank">#</span>
             <span className="col-name">Player</span>

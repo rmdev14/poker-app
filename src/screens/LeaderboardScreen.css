@@ -99,6 +99,14 @@
   margin-right: -20px;
 }
 
+.leaderboard-hint {
+  font-size: 11px;
+  color: #A8C5B0;
+  text-align: center;
+  margin: 0 0 8px 0;
+  padding: 0 16px;
+}
+
 /* Shared grid layout for header and rows */
 .leaderboard-header,
 .player-row {

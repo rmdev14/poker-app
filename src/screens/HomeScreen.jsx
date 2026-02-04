@@ -34,13 +34,16 @@ function HomeScreen() {
   const navigate = useNavigate()
   const nextGameDate = getNextThursday()
 
-  const [lastGame, setLastGame] = useState(null)
-  const [loadingLastGame, setLoadingLastGame] = useState(true)
+  const [lastGameWithWinners, setLastGameWithWinners] = useState(null)
+  const [gamesPlayed, setGamesPlayed] = useState(0)
+  const [christmasPot, setChristmasPot] = useState(0)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function fetchLastGame() {
+    async function fetchHomeData() {
       try {
-        const { data, error } = await supabase
+        // Fetch all game_nights to calculate stats
+        const { data: allGames, error: gamesError } = await supabase
           .from('game_nights')
           .select(`
             *,
@@ -49,20 +52,31 @@ function HomeScreen() {
             third_place_player:third_place_player_id(name)
           `)
           .order('game_date', { ascending: false })
-          .limit(1)
-          .single()
 
-        if (!error && data) {
-          setLastGame(data)
+        if (gamesError) throw gamesError
+
+        if (allGames && allGames.length > 0) {
+          // Games played = total count
+          setGamesPlayed(allGames.length)
+
+          // Christmas pot = sum of all pot_amount values
+          const potTotal = allGames.reduce((sum, game) => sum + (game.pot_amount || 0), 0)
+          setChristmasPot(potTotal)
+
+          // Find most recent game that has winners
+          const gameWithWinners = allGames.find(game => game.first_place_player_id !== null)
+          if (gameWithWinners) {
+            setLastGameWithWinners(gameWithWinners)
+          }
         }
       } catch (err) {
-        console.error('Failed to fetch last game:', err)
+        console.error('Failed to fetch home data:', err)
       } finally {
-        setLoadingLastGame(false)
+        setLoading(false)
       }
     }
 
-    fetchLastGame()
+    fetchHomeData()
   }, [])
 
   const navCards = [
@@ -180,12 +194,12 @@ function HomeScreen() {
         <div className="stats-row">
           <div className="stat">
             <span className="stat-label">GAMES PLAYED</span>
-            <span className="stat-value">0</span>
+            <span className="stat-value">{gamesPlayed}</span>
           </div>
           <div className="stats-divider" />
           <div className="stat">
             <span className="stat-label">CHRISTMAS POT</span>
-            <span className="stat-value">£0</span>
+            <span className="stat-value">£{christmasPot}</span>
           </div>
         </div>
         <div className="next-game">
@@ -215,27 +229,27 @@ function HomeScreen() {
       {/* Last Week's Winners */}
       <section className="winners">
         <span className="winners-title">LAST WEEK'S WINNERS</span>
-        {loadingLastGame ? (
+        {loading ? (
           <div className="winners-loading">Loading...</div>
-        ) : lastGame && lastGame.first_place_player_id ? (
+        ) : lastGameWithWinners ? (
           <div className="winners-podium">
             {/* 2nd place - left */}
             <div className="winner">
               <div className="winner-medal winner-medal-silver">2nd</div>
-              <span className="winner-name">{lastGame.second_place_player?.name}</span>
-              <span className="winner-prize">£{lastGame.second_place_prize}</span>
+              <span className="winner-name">{lastGameWithWinners.second_place_player?.name}</span>
+              <span className="winner-prize">£{lastGameWithWinners.second_place_prize}</span>
             </div>
             {/* 1st place - centre */}
             <div className="winner">
               <div className="winner-medal winner-medal-gold">1st</div>
-              <span className="winner-name">{lastGame.first_place_player?.name}</span>
-              <span className="winner-prize">£{lastGame.first_place_prize}</span>
+              <span className="winner-name">{lastGameWithWinners.first_place_player?.name}</span>
+              <span className="winner-prize">£{lastGameWithWinners.first_place_prize}</span>
             </div>
             {/* 3rd place - right */}
             <div className="winner">
               <div className="winner-medal winner-medal-bronze">3rd</div>
-              <span className="winner-name">{lastGame.third_place_player?.name}</span>
-              <span className="winner-prize">£{lastGame.third_place_prize}</span>
+              <span className="winner-name">{lastGameWithWinners.third_place_player?.name}</span>
+              <span className="winner-prize">£{lastGameWithWinners.third_place_prize}</span>
             </div>
           </div>
         ) : (
