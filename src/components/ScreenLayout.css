@@ -3,8 +3,8 @@
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  padding: var(--safe-area-top) var(--spacing-screen-x) var(--safe-area-bottom);
-  background-color: var(--color-bg-primary);
+  padding: calc(env(safe-area-inset-top, 0px) + 16px) 20px calc(env(safe-area-inset-bottom, 0px) + 20px);
+  background-color: #0F2419;
 }
 
 .screen-header {
