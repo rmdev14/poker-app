@@ -314,8 +314,8 @@ function GameDetailScreen() {
           third_place_player_id: thirdPlace,
           third_place_prize: thirdPrize,
           pot_amount: potAmount,
-          prizes_adjusted: prizesAdjusted,
-          is_complete: willBeComplete
+          prizes_adjusted: Boolean(prizesAdjusted),
+          is_complete: Boolean(willBeComplete)
         })
         .eq('id', id)
 
@@ -530,7 +530,8 @@ function GameDetailScreen() {
       const updateData = {}
 
       // Always update winners if we're editing them
-      if (hasWinners || (firstPlace && secondPlace && thirdPlace)) {
+      const willHaveWinners = !!(firstPlace && secondPlace && thirdPlace)
+      if (hasWinners || willHaveWinners) {
         updateData.first_place_player_id = firstPlace || null
         updateData.first_place_prize = firstPrize
         updateData.second_place_player_id = secondPlace || null
@@ -538,11 +539,10 @@ function GameDetailScreen() {
         updateData.third_place_player_id = thirdPlace || null
         updateData.third_place_prize = thirdPrize
         updateData.pot_amount = potAmount
-        updateData.prizes_adjusted = prizesAdjusted
+        updateData.prizes_adjusted = Boolean(prizesAdjusted)
       }
 
       // Update is_complete status
-      const willHaveWinners = firstPlace && secondPlace && thirdPlace
       const willHaveAttendees = editSelectedAttendees.size === game.attendance_count
       updateData.is_complete = willHaveWinners && willHaveAttendees
 
