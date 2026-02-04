@@ -3,12 +3,14 @@
    ============================================ */
 
 .home-screen {
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
-  padding: calc(env(safe-area-inset-top, 0px) + 40px) 20px calc(env(safe-area-inset-bottom, 0px) + 20px);
+  padding: calc(env(safe-area-inset-top, 0px) + 28px) 20px calc(env(safe-area-inset-bottom, 0px) + 12px);
   position: relative;
+  overflow: hidden;
+  overscroll-behavior: none;
 
   /* Layer 2: Felt surface gradient */
   background: radial-gradient(
@@ -59,7 +61,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .brand-top {
@@ -295,7 +297,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .stats-row {
@@ -354,15 +356,14 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  flex: 1;
+  gap: 10px;
 }
 
 .nav-card {
   display: flex;
   align-items: center;
-  min-height: 76px;
-  padding: 18px 20px;
+  min-height: 68px;
+  padding: 14px 18px;
   background: linear-gradient(135deg, #1A3D2C 0%, #163528 100%);
   border: 1px solid rgba(212, 168, 67, 0.15);
   border-left: 2px solid #D4A843;
@@ -509,7 +510,7 @@
   z-index: 1;
   text-align: center;
   margin-top: auto;
-  padding-top: 16px;
+  padding-top: 8px;
 }
 
 .home-footer span {
