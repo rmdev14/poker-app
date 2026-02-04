@@ -1,4 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
-  <circle cx="96" cy="96" r="96" fill="#1a472a"/>
-  <text x="96" y="130" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="white" text-anchor="middle">P</text>
+  <defs>
+    <radialGradient id="vignette192" cx="50%" cy="50%" r="70%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#1A472A"/>
+      <stop offset="100%" stop-color="#0F2A19"/>
+    </radialGradient>
+  </defs>
+  <!-- Background with rounded corners -->
+  <rect x="0" y="0" width="192" height="192" rx="38" ry="38" fill="url(#vignette192)"/>
+  <!-- Gold spade symbol -->
+  <path d="M96 24C96 24 52 68 52 98C52 118 68 132 88 132C88 132 80 148 68 156L124 156C112 148 104 132 104 132C124 132 140 118 140 98C140 68 96 24 96 24Z" fill="#D4A843"/>
+  <!-- Spade stem -->
+  <rect x="88" y="132" width="16" height="24" fill="#D4A843"/>
+  <!-- MF text -->
+  <text x="96" y="180" font-family="Arial, sans-serif" font-size="34" font-weight="bold" fill="#D4A843" text-anchor="middle" letter-spacing="2">MF</text>
 </svg>
