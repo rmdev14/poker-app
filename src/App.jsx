@@ -4,16 +4,20 @@ import LeaderboardScreen from './screens/LeaderboardScreen'
 import GamesScreen from './screens/GamesScreen'
 import NewGameScreen from './screens/NewGameScreen'
 import PrizeChartScreen from './screens/PrizeChartScreen'
+import UpdateToast from './components/UpdateToast'
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomeScreen />} />
-      <Route path="/leaderboard" element={<LeaderboardScreen />} />
-      <Route path="/games" element={<GamesScreen />} />
-      <Route path="/games/new" element={<NewGameScreen />} />
-      <Route path="/prize-chart" element={<PrizeChartScreen />} />
-    </Routes>
+    <>
+      <UpdateToast />
+      <Routes>
+        <Route path="/" element={<HomeScreen />} />
+        <Route path="/leaderboard" element={<LeaderboardScreen />} />
+        <Route path="/games" element={<GamesScreen />} />
+        <Route path="/games/new" element={<NewGameScreen />} />
+        <Route path="/prize-chart" element={<PrizeChartScreen />} />
+      </Routes>
+    </>
   )
 }
 

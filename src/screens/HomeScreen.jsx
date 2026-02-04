@@ -179,6 +179,31 @@ function HomeScreen() {
         ))}
       </nav>
 
+      {/* Last Week's Winners */}
+      <section className="winners">
+        <span className="winners-title">LAST WEEK'S WINNERS</span>
+        <div className="winners-podium">
+          {/* 2nd place - left */}
+          <div className="winner">
+            <div className="winner-medal winner-medal-silver">2nd</div>
+            <span className="winner-name">Ross</span>
+            <span className="winner-prize">£80</span>
+          </div>
+          {/* 1st place - centre */}
+          <div className="winner">
+            <div className="winner-medal winner-medal-gold">1st</div>
+            <span className="winner-name">Calvin</span>
+            <span className="winner-prize">£180</span>
+          </div>
+          {/* 3rd place - right */}
+          <div className="winner">
+            <div className="winner-medal winner-medal-bronze">3rd</div>
+            <span className="winner-name">Graeme</span>
+            <span className="winner-prize">£50</span>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="home-footer">
         <span>Est. 2026</span>
