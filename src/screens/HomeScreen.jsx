@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 import './HomeScreen.css'
 
 function getOrdinalSuffix(day) {
@@ -31,6 +33,37 @@ function getNextThursday() {
 function HomeScreen() {
   const navigate = useNavigate()
   const nextGameDate = getNextThursday()
+
+  const [lastGame, setLastGame] = useState(null)
+  const [loadingLastGame, setLoadingLastGame] = useState(true)
+
+  useEffect(() => {
+    async function fetchLastGame() {
+      try {
+        const { data, error } = await supabase
+          .from('game_nights')
+          .select(`
+            *,
+            first_place_player:first_place_player_id(name),
+            second_place_player:second_place_player_id(name),
+            third_place_player:third_place_player_id(name)
+          `)
+          .order('game_date', { ascending: false })
+          .limit(1)
+          .single()
+
+        if (!error && data) {
+          setLastGame(data)
+        }
+      } catch (err) {
+        console.error('Failed to fetch last game:', err)
+      } finally {
+        setLoadingLastGame(false)
+      }
+    }
+
+    fetchLastGame()
+  }, [])
 
   const navCards = [
     {
@@ -182,26 +215,32 @@ function HomeScreen() {
       {/* Last Week's Winners */}
       <section className="winners">
         <span className="winners-title">LAST WEEK'S WINNERS</span>
-        <div className="winners-podium">
-          {/* 2nd place - left */}
-          <div className="winner">
-            <div className="winner-medal winner-medal-silver">2nd</div>
-            <span className="winner-name">Ross</span>
-            <span className="winner-prize">£80</span>
+        {loadingLastGame ? (
+          <div className="winners-loading">Loading...</div>
+        ) : lastGame && lastGame.first_place_player_id ? (
+          <div className="winners-podium">
+            {/* 2nd place - left */}
+            <div className="winner">
+              <div className="winner-medal winner-medal-silver">2nd</div>
+              <span className="winner-name">{lastGame.second_place_player?.name}</span>
+              <span className="winner-prize">£{lastGame.second_place_prize}</span>
+            </div>
+            {/* 1st place - centre */}
+            <div className="winner">
+              <div className="winner-medal winner-medal-gold">1st</div>
+              <span className="winner-name">{lastGame.first_place_player?.name}</span>
+              <span className="winner-prize">£{lastGame.first_place_prize}</span>
+            </div>
+            {/* 3rd place - right */}
+            <div className="winner">
+              <div className="winner-medal winner-medal-bronze">3rd</div>
+              <span className="winner-name">{lastGame.third_place_player?.name}</span>
+              <span className="winner-prize">£{lastGame.third_place_prize}</span>
+            </div>
           </div>
-          {/* 1st place - centre */}
-          <div className="winner">
-            <div className="winner-medal winner-medal-gold">1st</div>
-            <span className="winner-name">Calvin</span>
-            <span className="winner-prize">£180</span>
-          </div>
-          {/* 3rd place - right */}
-          <div className="winner">
-            <div className="winner-medal winner-medal-bronze">3rd</div>
-            <span className="winner-name">Graeme</span>
-            <span className="winner-prize">£50</span>
-          </div>
-        </div>
+        ) : (
+          <div className="winners-pending">Results pending</div>
+        )}
       </section>
 
       {/* Footer */}

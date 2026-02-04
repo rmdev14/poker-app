@@ -468,6 +468,14 @@
   color: #D4A843;
 }
 
+.winners-loading,
+.winners-pending {
+  font-size: 14px;
+  color: #A8C5B0;
+  text-align: center;
+  padding: 16px 0;
+}
+
 /* ============================================
    Footer
    ============================================ */

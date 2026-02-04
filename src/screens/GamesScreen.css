@@ -37,8 +37,168 @@
   text-transform: uppercase;
 }
 
-.history-empty {
+/* Loading and Error States */
+.loading-state,
+.error-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
   color: #A8C5B0;
+  font-size: 16px;
+}
+
+.error-state {
+  color: #E57373;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 24px;
   text-align: center;
-  padding: 32px 0;
+}
+
+.empty-icon {
+  font-size: 48px;
+  opacity: 0.6;
+}
+
+.empty-text {
+  color: #A8C5B0;
+  font-size: 16px;
+}
+
+/* Games List */
+.games-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Game Card */
+.game-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  background: #1A3A2A;
+  border: none;
+  border-radius: 12px;
+  text-align: left;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.game-card:active {
+  background: #1E4432;
+  transform: scale(0.99);
+}
+
+.game-card-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.game-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.game-date {
+  font-size: 16px;
+  font-weight: 600;
+  color: #FFFFFF;
+  width: 100%;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.status-badge.complete {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+}
+
+.status-badge.attendees-required,
+.status-badge.winners-required,
+.status-badge.both-required {
+  background: rgba(212, 168, 67, 0.15);
+  color: #D4A843;
+}
+
+.game-winners {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.winner-line .position {
+  display: inline;
+  margin-right: 4px;
+  font-size: 13px;
+}
+
+.winner-line .amount {
+  display: inline;
+  margin-right: 4px;
+  font-size: 13px;
+}
+
+.winner-line .name {
+  display: inline;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.winner-line.first .position,
+.winner-line.first .amount {
+  color: #D4A843;
+}
+
+.winner-line.first .name {
+  color: #FFFFFF;
+}
+
+.winner-line.second .position,
+.winner-line.second .amount,
+.winner-line.second .name,
+.winner-line.third .position,
+.winner-line.third .amount,
+.winner-line.third .name {
+  color: #A8C5B0;
+}
+
+.game-meta {
+  font-size: 13px;
+  color: #6B8B7A;
+}
+
+.game-card-arrow {
+  font-size: 20px;
+  color: #6B8B7A;
+  flex-shrink: 0;
+}
+
+.no-winners {
+  font-size: 13px;
+  color: #A8C5B0;
+  font-style: italic;
+  padding: 4px 0;
 }
