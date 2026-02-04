@@ -7,10 +7,10 @@
   </defs>
   <!-- Background with rounded corners -->
   <rect x="0" y="0" width="192" height="192" rx="38" ry="38" fill="url(#vignette192)"/>
-  <!-- Gold spade symbol -->
-  <path d="M96 24C96 24 52 68 52 98C52 118 68 132 88 132C88 132 80 148 68 156L124 156C112 148 104 132 104 132C124 132 140 118 140 98C140 68 96 24 96 24Z" fill="#D4A843"/>
+  <!-- Gold spade symbol - smaller and higher -->
+  <path d="M96 28C96 28 62 58 62 80C62 94 74 104 88 104C88 104 82 114 74 120L118 120C110 114 104 104 104 104C118 104 130 94 130 80C130 58 96 28 96 28Z" fill="#D4A843"/>
   <!-- Spade stem -->
-  <rect x="88" y="132" width="16" height="24" fill="#D4A843"/>
-  <!-- MF text -->
-  <text x="96" y="180" font-family="Arial, sans-serif" font-size="34" font-weight="bold" fill="#D4A843" text-anchor="middle" letter-spacing="2">MF</text>
+  <rect x="90" y="104" width="12" height="16" fill="#D4A843"/>
+  <!-- MF text in white -->
+  <text x="96" y="168" font-family="Arial, sans-serif" font-size="42" font-weight="bold" fill="#FFFFFF" text-anchor="middle" letter-spacing="3">MF</text>
 </svg>
