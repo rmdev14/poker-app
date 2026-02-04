@@ -14,42 +14,7 @@
   padding-top: calc(env(safe-area-inset-top, 0px) + 28px);
   overflow: hidden;
   overscroll-behavior: none;
-
-  /* Layer 2: Felt surface gradient - covers entire fixed container including status bar */
-  background: radial-gradient(
-    ellipse at 50% 30%,
-    #1B5E3B 0%,
-    #14472C 40%,
-    #0D3320 70%,
-    #0F2419 100%
-  );
-}
-
-/* Layer 3: Felt texture */
-.home-screen::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-conic-gradient(
-    rgba(255, 255, 255, 0.015) 0% 25%,
-    transparent 0% 50%
-  ) 0 0 / 4px 4px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Layer 4: Vignette */
-.home-screen::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at 50% 50%,
-    transparent 40%,
-    rgba(0, 0, 0, 0.5) 100%
-  );
-  pointer-events: none;
-  z-index: 0;
+  background-color: #0F2419;
 }
 
 /* ============================================
