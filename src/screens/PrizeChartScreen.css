@@ -1,0 +1,115 @@
+/* ============================================
+   Prize Chart Screen
+   ============================================ */
+
+.prize-chart-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 20px;
+}
+
+/* Loading, Error, Empty States */
+.prize-chart-loading,
+.prize-chart-error,
+.prize-chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  color: #A8C5B0;
+  font-size: 16px;
+}
+
+.prize-chart-error {
+  color: #E57373;
+}
+
+/* ============================================
+   Prize Table
+   ============================================ */
+
+.prize-table-container {
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+.prize-table {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Shared grid for header and rows */
+.prize-table-header,
+.prize-table-row {
+  display: grid;
+  grid-template-columns: 55px 1fr 1fr 1fr 1fr;
+  column-gap: 8px;
+  align-items: center;
+  padding: 12px 16px;
+}
+
+/* Header */
+.prize-table-header {
+  background: #0F2419;
+  position: sticky;
+  top: calc(env(safe-area-inset-top, 0px) + 16px);
+  z-index: 10;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.prize-table-header span {
+  font-size: 10px;
+  font-weight: 600;
+  color: #A8C5B0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Table Body */
+.prize-table-body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Row Styles */
+.prize-table-row {
+  background: #0F2419;
+}
+
+.prize-table-row.even {
+  background: rgba(26, 58, 42, 0.3);
+}
+
+/* Column Alignment */
+.col-players {
+  text-align: center;
+}
+
+.col-first,
+.col-second,
+.col-third,
+.col-pot {
+  text-align: right;
+}
+
+/* Row Text Styles */
+.prize-table-row .col-players {
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.prize-table-row .col-first {
+  font-size: 14px;
+  font-weight: 600;
+  color: #D4A843;
+}
+
+.prize-table-row .col-second,
+.prize-table-row .col-third,
+.prize-table-row .col-pot {
+  font-size: 14px;
+  color: #A8C5B0;
+}
+
