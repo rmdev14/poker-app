@@ -219,11 +219,11 @@ function calculateLeaderboardData(gameNights, attendances, players) {
   return leaderboard
 }
 
-function calculateSeasonStats(gameNights) {
+function calculateSeasonStats(gameNights, leaderboard) {
   const totalGames = gameNights.length
-  const totalPrizePool = gameNights.reduce((sum, g) => sum + (g.attendance_count || 0) * 20, 0)
+  const totalPaidOut = leaderboard.reduce((sum, p) => sum + p.totalWinnings, 0)
   const christmasPot = gameNights.reduce((sum, g) => sum + (g.pot_amount || 0), 0)
-  return { totalGames, totalPrizePool, christmasPot }
+  return { totalGames, totalPaidOut, christmasPot }
 }
 
 function formatPL(amount) {
@@ -288,8 +288,8 @@ function LeaderboardScreen() {
   )
 
   const seasonStats = useMemo(
-    () => calculateSeasonStats(gameNights),
-    [gameNights]
+    () => calculateSeasonStats(gameNights, leaderboard),
+    [gameNights, leaderboard]
   )
 
   function toggleExpand(playerId) {
@@ -344,7 +344,7 @@ function LeaderboardScreen() {
             <div className="season-stat-divider" />
             <div className="season-stat">
               <span className="season-stat-label">TOTAL PAID OUT</span>
-              <span className="season-stat-value">£{seasonStats.totalPrizePool}</span>
+              <span className="season-stat-value">£{seasonStats.totalPaidOut}</span>
             </div>
             <div className="season-stat-divider" />
             <div className="season-stat">
