@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../context/AuthContext'
 import ScreenLayout from '../components/ScreenLayout'
 import './GamesScreen.css'
 
@@ -45,6 +46,7 @@ function getGameStatus(game, hasAttendees) {
 
 function GamesScreen() {
   const navigate = useNavigate()
+  const { isAdmin } = useAuth()
   const [games, setGames] = useState([])
   const [gamesWithAttendees, setGamesWithAttendees] = useState(new Set())
   const [loading, setLoading] = useState(true)
@@ -95,12 +97,14 @@ function GamesScreen() {
   return (
     <ScreenLayout title="Games">
       <div className="games-content">
-        <button
-          className="new-game-btn"
-          onClick={() => navigate('/games/new')}
-        >
-          New Game Night
-        </button>
+        {isAdmin && (
+          <button
+            className="new-game-btn"
+            onClick={() => navigate('/games/new')}
+          >
+            New Game Night
+          </button>
+        )}
 
         <section className="game-history">
           <h2 className="history-title">GAME HISTORY</h2>

@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../context/AuthContext'
 import './HomeScreen.css'
 
 function getOrdinalSuffix(day) {
@@ -32,12 +33,44 @@ function getNextThursday() {
 
 function HomeScreen() {
   const navigate = useNavigate()
+  const { isAdmin, signOut } = useAuth()
   const nextGameDate = getNextThursday()
 
   const [lastGameWithWinners, setLastGameWithWinners] = useState(null)
   const [gamesPlayed, setGamesPlayed] = useState(0)
   const [christmasPot, setChristmasPot] = useState(0)
   const [loading, setLoading] = useState(true)
+
+  // Triple-tap login on brand name
+  const tapCountRef = useRef(0)
+  const tapTimerRef = useRef(null)
+
+  function handleBrandTap() {
+    if (isAdmin) return
+
+    tapCountRef.current += 1
+
+    if (tapTimerRef.current) {
+      clearTimeout(tapTimerRef.current)
+    }
+
+    if (tapCountRef.current >= 3) {
+      tapCountRef.current = 0
+      navigate('/admin/login')
+    } else {
+      tapTimerRef.current = setTimeout(() => {
+        tapCountRef.current = 0
+      }, 500)
+    }
+  }
+
+  async function handleLogout() {
+    try {
+      await signOut()
+    } catch (err) {
+      console.error('Logout failed:', err)
+    }
+  }
 
   useEffect(() => {
     async function fetchHomeData() {
@@ -107,7 +140,7 @@ function HomeScreen() {
     <div className="home-screen">
       {/* Branding */}
       <header className="branding">
-        <span className="brand-top">MINNESOTA FATS</span>
+        <span className="brand-top" onClick={handleBrandTap}>MINNESOTA FATS</span>
         <div className="brand-main-wrapper">
           {/* Left card pair */}
           <div className="decorative-cards cards-left">
@@ -259,7 +292,16 @@ function HomeScreen() {
 
       {/* Footer */}
       <footer className="home-footer">
-        <span>Est. 2026</span>
+        {isAdmin ? (
+          <div className="admin-footer">
+            <span className="admin-indicator">Admin Mode</span>
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
+        ) : (
+          <span className="footer-text">Est. 2026</span>
+        )}
       </footer>
     </div>
   )

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../context/AuthContext'
 import ScreenLayout from '../components/ScreenLayout'
 import PlayerChipsSelector from '../components/PlayerChipsSelector'
 import './GameDetailScreen.css'
@@ -45,6 +46,7 @@ function getGameStatus(game) {
 function GameDetailScreen() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { isAdmin } = useAuth()
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -601,7 +603,7 @@ function GameDetailScreen() {
   }
 
   // Determine if we need sticky button spacing
-  const showStickyButton = isEditMode || (attendees.length === 0 && !loading)
+  const showStickyButton = isEditMode || (attendees.length === 0 && !loading && isAdmin)
 
   if (loading) {
     return (
@@ -660,7 +662,7 @@ function GameDetailScreen() {
               </div>
             </div>
           </section>
-        ) : (isEditMode || !hasWinners) ? (
+        ) : isAdmin && (isEditMode || !hasWinners) ? (
           <section className="detail-section">
             <h3 className="section-label">{isEditMode ? 'EDIT WINNERS' : 'ADD WINNERS'}</h3>
             <div className="add-winners-form">
@@ -899,7 +901,7 @@ function GameDetailScreen() {
               showCounter={false}
             />
           </section>
-        ) : (
+        ) : isAdmin ? (
           <section className="detail-section">
             <h3 className="section-label">
               COMPLETE ATTENDANCE ({selectedAttendees.size}/{game.attendance_count})
@@ -921,10 +923,10 @@ function GameDetailScreen() {
 
             {error && <div className="save-error">{error}</div>}
           </section>
-        )}
+        ) : null}
 
-        {/* Actions Section - only show when not in edit mode and no sticky attendance button */}
-        {!isEditMode && (
+        {/* Actions Section - only show when not in edit mode and user is admin */}
+        {!isEditMode && isAdmin && (
           <>
             {/* Edit Button - show for complete or partial games */}
             {(game.is_complete || hasWinners || attendees.length > 0) && (
@@ -958,7 +960,7 @@ function GameDetailScreen() {
       </div>
 
       {/* Sticky Complete Attendance Button */}
-      {!isEditMode && attendees.length === 0 && (
+      {!isEditMode && attendees.length === 0 && isAdmin && (
         <div className="sticky-button-bar">
           <button
             className={`complete-btn ${!attendanceValid ? 'disabled' : ''}`}

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../context/AuthContext'
 import ScreenLayout from '../components/ScreenLayout'
 import PlayerChipsSelector from '../components/PlayerChipsSelector'
 import './NewGameScreen.css'
@@ -56,6 +57,14 @@ function getSmartDefaultDate(existingDates) {
 
 function NewGameScreen() {
   const navigate = useNavigate()
+  const { isAdmin, loading: authLoading } = useAuth()
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !isAdmin) {
+      navigate('/admin/login')
+    }
+  }, [isAdmin, authLoading, navigate])
 
   // Loading and error states
   const [loading, setLoading] = useState(true)

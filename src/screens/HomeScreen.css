@@ -38,6 +38,9 @@
   letter-spacing: 4px;
   text-shadow: 0 0 30px rgba(212, 168, 67, 0.2);
   margin-bottom: 12px;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .brand-main-wrapper {
@@ -488,8 +491,43 @@
   padding-top: 8px;
 }
 
-.home-footer span {
+.footer-text {
   font-size: 11px;
   color: #A8C5B0;
   opacity: 0.2;
+}
+
+/* Admin Footer */
+.admin-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.admin-indicator {
+  font-size: 11px;
+  font-weight: 600;
+  color: #D4A843;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid rgba(212, 168, 67, 0.3);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #A8C5B0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.logout-btn:active {
+  background: rgba(212, 168, 67, 0.1);
+  border-color: #D4A843;
+  color: #D4A843;
 }
