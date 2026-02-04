@@ -12,8 +12,8 @@ export default defineConfig({
         name: 'Poker Tracker',
         short_name: 'Poker',
         description: 'Track your weekly poker game',
-        theme_color: '#1a472a',
-        background_color: '#1a472a',
+        theme_color: '#0F2419',
+        background_color: '#0F2419',
         display: 'standalone',
         orientation: 'portrait',
         icons: [
