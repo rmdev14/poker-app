@@ -9,6 +9,10 @@
   padding-bottom: 32px;
 }
 
+.game-detail-content.has-sticky-button {
+  padding-bottom: 100px;
+}
+
 /* Loading and Error States */
 .loading-state,
 .error-state {
@@ -892,4 +896,39 @@
 
 .modal-btn:disabled {
   opacity: 0.6;
+}
+
+.modal-btn-primary {
+  color: #0F2419;
+  background: #D4A843;
+  border: none;
+}
+
+.modal-btn-primary:active:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* ============================================
+   Sticky Button Bar
+   ============================================ */
+
+.sticky-button-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 20px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  background: #0F2419;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.sticky-button-bar .complete-btn {
+  margin-top: 0;
+}
+
+.sticky-button-bar .edit-actions {
+  display: flex;
+  gap: 12px;
 }

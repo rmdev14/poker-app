@@ -80,6 +80,13 @@ function GameDetailScreen() {
   const [addingPlayer, setAddingPlayer] = useState(false)
   const [addPlayerError, setAddPlayerError] = useState(null)
 
+  // Unsaved changes tracking
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const [showUnsavedModal, setShowUnsavedModal] = useState(false)
+
+  // Track initial state for comparison
+  const [initialAttendees, setInitialAttendees] = useState(new Set())
+
   useEffect(() => {
     fetchGameData()
   }, [id])
@@ -180,6 +187,7 @@ function GameDetailScreen() {
       }
       return next
     })
+    setHasUnsavedChanges(true)
   }
 
   const attendanceValid = selectedAttendees.size === game?.attendance_count
@@ -213,6 +221,7 @@ function GameDetailScreen() {
       }
 
       // Refresh the data
+      setHasUnsavedChanges(false)
       await fetchGameData()
     } catch (err) {
       setError(err.message || 'Failed to save attendance')
@@ -310,6 +319,7 @@ function GameDetailScreen() {
 
       if (updateError) throw updateError
 
+      setHasUnsavedChanges(false)
       await fetchGameData()
     } catch (err) {
       setWinnersError(err.message || 'Failed to save winners')
@@ -322,6 +332,23 @@ function GameDetailScreen() {
     const numValue = parseInt(value) || 0
     setter(numValue)
     setPrizesAdjusted(true)
+    setHasUnsavedChanges(true)
+  }
+
+  // Track winner selection changes
+  function handleFirstPlaceChange(value) {
+    setFirstPlace(value)
+    setHasUnsavedChanges(true)
+  }
+
+  function handleSecondPlaceChange(value) {
+    setSecondPlace(value)
+    setHasUnsavedChanges(true)
+  }
+
+  function handleThirdPlaceChange(value) {
+    setThirdPlace(value)
+    setHasUnsavedChanges(true)
   }
 
   async function handleDelete() {
@@ -440,6 +467,7 @@ function GameDetailScreen() {
       }
       return next
     })
+    setHasUnsavedChanges(true)
   }
 
   // Auto-add winners to edit attendees when changed
@@ -547,6 +575,7 @@ function GameDetailScreen() {
       }
 
       setIsEditMode(false)
+      setHasUnsavedChanges(false)
       await fetchGameData()
     } catch (err) {
       setEditError(err.message || 'Failed to save changes')
@@ -554,6 +583,25 @@ function GameDetailScreen() {
       setSavingEdit(false)
     }
   }
+
+  // Handle back button with unsaved changes check
+  function handleBeforeBack() {
+    if (hasUnsavedChanges) {
+      setShowUnsavedModal(true)
+      return false // Block navigation
+    }
+    return true // Allow navigation
+  }
+
+  // Proceed with navigation (discard changes)
+  function handleDiscardChanges() {
+    setShowUnsavedModal(false)
+    setHasUnsavedChanges(false)
+    navigate('/games')
+  }
+
+  // Determine if we need sticky button spacing
+  const showStickyButton = isEditMode || (attendees.length === 0 && !loading)
 
   if (loading) {
     return (
@@ -575,8 +623,8 @@ function GameDetailScreen() {
   const status = getGameStatus(game)
 
   return (
-    <ScreenLayout title="Game Details" backPath="/games">
-      <div className="game-detail-content">
+    <ScreenLayout title="Game Details" backPath="/games" onBeforeBack={handleBeforeBack}>
+      <div className={`game-detail-content ${showStickyButton ? 'has-sticky-button' : ''}`}>
         {/* Game Date Header */}
         <div className="detail-header">
           <h2 className="detail-date">{formatGameDate(game.game_date)}</h2>
@@ -623,7 +671,7 @@ function GameDetailScreen() {
                   <select
                     className="player-select"
                     value={firstPlace}
-                    onChange={(e) => setFirstPlace(e.target.value)}
+                    onChange={(e) => handleFirstPlaceChange(e.target.value)}
                   >
                     <option value="">Select player...</option>
                     {availableForFirst.map(p => (
@@ -638,7 +686,7 @@ function GameDetailScreen() {
                   <select
                     className="player-select"
                     value={secondPlace}
-                    onChange={(e) => setSecondPlace(e.target.value)}
+                    onChange={(e) => handleSecondPlaceChange(e.target.value)}
                   >
                     <option value="">Select player...</option>
                     {availableForSecond.map(p => (
@@ -653,7 +701,7 @@ function GameDetailScreen() {
                   <select
                     className="player-select"
                     value={thirdPlace}
-                    onChange={(e) => setThirdPlace(e.target.value)}
+                    onChange={(e) => handleThirdPlaceChange(e.target.value)}
                   >
                     <option value="">Select player...</option>
                     {availableForThird.map(p => (
@@ -871,40 +919,12 @@ function GameDetailScreen() {
               showCounter={false}
             />
 
-            <button
-              className={`complete-btn ${!attendanceValid ? 'disabled' : ''}`}
-              onClick={handleCompleteAttendance}
-              disabled={!attendanceValid || saving}
-            >
-              {saving ? 'Saving...' : 'Complete Attendance'}
-            </button>
-
             {error && <div className="save-error">{error}</div>}
           </section>
         )}
 
-        {/* Actions Section */}
-        {isEditMode ? (
-          <section className="detail-section actions-section">
-            <div className="edit-actions">
-              <button
-                className="cancel-edit-btn"
-                onClick={cancelEditMode}
-                disabled={savingEdit}
-              >
-                Cancel
-              </button>
-              <button
-                className={`save-edit-btn ${!editFormValid ? 'disabled' : ''}`}
-                onClick={handleSaveEdit}
-                disabled={!editFormValid || savingEdit}
-              >
-                {savingEdit ? 'Saving...' : 'Save Changes'}
-              </button>
-            </div>
-            {editError && <div className="save-error">{editError}</div>}
-          </section>
-        ) : (
+        {/* Actions Section - only show when not in edit mode and no sticky attendance button */}
+        {!isEditMode && (
           <>
             {/* Edit Button - show for complete or partial games */}
             {(game.is_complete || hasWinners || attendees.length > 0) && (
@@ -930,7 +950,47 @@ function GameDetailScreen() {
             </section>
           </>
         )}
+
+        {/* Edit mode error display (non-sticky) */}
+        {isEditMode && editError && (
+          <div className="save-error">{editError}</div>
+        )}
       </div>
+
+      {/* Sticky Complete Attendance Button */}
+      {!isEditMode && attendees.length === 0 && (
+        <div className="sticky-button-bar">
+          <button
+            className={`complete-btn ${!attendanceValid ? 'disabled' : ''}`}
+            onClick={handleCompleteAttendance}
+            disabled={!attendanceValid || saving}
+          >
+            {saving ? 'Saving...' : 'Complete Attendance'}
+          </button>
+        </div>
+      )}
+
+      {/* Sticky Edit Mode Actions */}
+      {isEditMode && (
+        <div className="sticky-button-bar">
+          <div className="edit-actions">
+            <button
+              className="cancel-edit-btn"
+              onClick={cancelEditMode}
+              disabled={savingEdit}
+            >
+              Cancel
+            </button>
+            <button
+              className={`save-edit-btn ${!editFormValid ? 'disabled' : ''}`}
+              onClick={handleSaveEdit}
+              disabled={!editFormValid || savingEdit}
+            >
+              {savingEdit ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
@@ -952,6 +1012,30 @@ function GameDetailScreen() {
                 disabled={deleting}
               >
                 {deleting ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Unsaved Changes Modal */}
+      {showUnsavedModal && (
+        <div className="modal-overlay" onClick={() => setShowUnsavedModal(false)}>
+          <div className="modal-card" onClick={e => e.stopPropagation()}>
+            <p className="modal-message">You have unsaved changes</p>
+            <p className="modal-subtitle">Your selections will be lost</p>
+            <div className="modal-buttons">
+              <button
+                className="modal-btn modal-btn-secondary"
+                onClick={handleDiscardChanges}
+              >
+                Discard
+              </button>
+              <button
+                className="modal-btn modal-btn-primary"
+                onClick={() => setShowUnsavedModal(false)}
+              >
+                Keep Editing
               </button>
             </div>
           </div>
