@@ -1,0 +1,54 @@
+/* ============================================
+   Minnesota Fats Poker — Design System
+   ============================================ */
+
+:root {
+  /* Colour Palette */
+  --color-bg-primary: #0F2419;
+  --color-bg-card: #1A3A2A;
+  --color-accent: #D4A843;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #A8C5B0;
+  --color-text-on-accent: #0F2419;
+  --color-success: #4CAF50;
+  --color-border: rgba(255, 255, 255, 0.08);
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);
+
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --font-size-title: 28px;
+  --font-size-section: 18px;
+  --font-size-card-title: 16px;
+  --font-size-body: 14px;
+  --font-size-small: 12px;
+
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --letter-spacing-heading: 0.5px;
+  --letter-spacing-caps: 1.5px;
+
+  /* Spacing */
+  --spacing-screen-x: 20px;
+  --spacing-card: 20px;
+  --spacing-gap: 16px;
+
+  /* Border Radius */
+  --radius-card: 16px;
+  --radius-button: 12px;
+
+  /* Button */
+  --button-padding: 16px 24px;
+  --button-min-height: 48px;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+
+  /* Safe Areas */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+}

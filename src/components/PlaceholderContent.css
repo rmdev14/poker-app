@@ -1,0 +1,12 @@
+.placeholder-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-text {
+  font-size: var(--font-size-section);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-semibold);
+}

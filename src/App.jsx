@@ -1,11 +1,19 @@
-import './App.css'
+import { Routes, Route } from 'react-router-dom'
+import HomeScreen from './screens/HomeScreen'
+import LeaderboardScreen from './screens/LeaderboardScreen'
+import GamesScreen from './screens/GamesScreen'
+import NewGameScreen from './screens/NewGameScreen'
+import PrizeChartScreen from './screens/PrizeChartScreen'
 
 function App() {
   return (
-    <div className="app-container">
-      <h1>Poker Tracker</h1>
-      <p>App is working</p>
-    </div>
+    <Routes>
+      <Route path="/" element={<HomeScreen />} />
+      <Route path="/leaderboard" element={<LeaderboardScreen />} />
+      <Route path="/games" element={<GamesScreen />} />
+      <Route path="/games/new" element={<NewGameScreen />} />
+      <Route path="/prize-chart" element={<PrizeChartScreen />} />
+    </Routes>
   )
 }
 

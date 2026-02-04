@@ -1,0 +1,446 @@
+/* ============================================
+   Home Screen — Poker Felt Design
+   ============================================ */
+
+.home-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: calc(env(safe-area-inset-top, 0px) + 40px) 20px calc(env(safe-area-inset-bottom, 0px) + 20px);
+  position: relative;
+
+  /* Layer 2: Felt surface gradient */
+  background: radial-gradient(
+    ellipse at 50% 30%,
+    #1B5E3B 0%,
+    #14472C 40%,
+    #0D3320 70%,
+    #091A12 100%
+  );
+  background-attachment: fixed;
+}
+
+/* Layer 3: Felt texture */
+.home-screen::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-conic-gradient(
+    rgba(255, 255, 255, 0.015) 0% 25%,
+    transparent 0% 50%
+  ) 0 0 / 4px 4px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Layer 4: Vignette */
+.home-screen::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   Branding Section
+   ============================================ */
+
+.branding {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.brand-top {
+  font-size: 14px;
+  font-weight: 700;
+  color: #D4A843;
+  letter-spacing: 4px;
+  text-shadow: 0 0 30px rgba(212, 168, 67, 0.2);
+  margin-bottom: 12px;
+}
+
+.brand-main-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.brand-main {
+  position: relative;
+  z-index: 2;
+  font-size: 52px;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: 8px;
+  line-height: 1;
+  margin: 0;
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(212, 168, 67, 0.15);
+}
+
+/* Decorative Playing Cards */
+.decorative-cards {
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  flex-shrink: 0;
+  transform: translateY(14px);
+}
+
+.pcard {
+  position: relative;
+  width: 44px;
+  height: 62px;
+  background: linear-gradient(180deg, #F5F0E8 0%, #EDE8E0 100%);
+  border-radius: 3px;
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.4),
+    inset 0 0 3px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+}
+
+/* Corner pips */
+.pcard-corner {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.pcard-corner-top {
+  top: 3px;
+  left: 4px;
+}
+
+.pcard-corner-bottom {
+  bottom: 3px;
+  right: 4px;
+  transform: rotate(180deg);
+}
+
+.pcard-rank {
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.pcard-pip {
+  font-size: 8px;
+  margin-top: -1px;
+}
+
+/* Center area */
+.pcard-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ace center - large single suit */
+.pcard-center-ace .pcard-ace-suit {
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* King center - crown with suit */
+.pcard-center-king {
+  gap: 1px;
+}
+
+.pcard-crown {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.pcard-center-suit {
+  font-size: 10px;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+.pcard-line {
+  width: 20px;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Color variants */
+.pcard-red .pcard-rank,
+.pcard-red .pcard-pip,
+.pcard-red .pcard-ace-suit,
+.pcard-red .pcard-crown,
+.pcard-red .pcard-center-suit {
+  color: #C41E3A;
+}
+
+.pcard-black .pcard-rank,
+.pcard-black .pcard-pip,
+.pcard-black .pcard-ace-suit,
+.pcard-black .pcard-crown,
+.pcard-black .pcard-center-suit {
+  color: #1A1A1A;
+}
+
+/* Back cards (Kings) - now on top */
+.pcard-back {
+  z-index: 2;
+}
+
+/* Front cards (Aces) - now behind */
+.pcard-front {
+  z-index: 1;
+}
+
+/* Left pair positioning */
+.cards-left .pcard-back {
+  transform: rotate(-25deg) scale(0.95);
+  margin-right: -18px;
+}
+
+.cards-left .pcard-front {
+  transform: rotate(-12deg);
+}
+
+/* Right pair positioning */
+.cards-right .pcard-back {
+  transform: rotate(25deg) scale(0.95);
+  margin-left: -18px;
+  order: 2;
+}
+
+.cards-right .pcard-front {
+  transform: rotate(12deg);
+  order: 1;
+}
+
+/* Responsive: scale down on narrow screens */
+@media (max-width: 380px) {
+  .brand-main-wrapper {
+    gap: 5px;
+  }
+
+  .decorative-cards {
+    transform: translateY(14px) scale(0.8);
+  }
+
+  .brand-main {
+    font-size: 44px;
+    letter-spacing: 6px;
+  }
+}
+
+.brand-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0 12px;
+}
+
+.divider-line {
+  width: 35px;
+  height: 1px;
+}
+
+.divider-left {
+  background: linear-gradient(to right, transparent, #D4A843);
+}
+
+.divider-right {
+  background: linear-gradient(to left, transparent, #D4A843);
+}
+
+.divider-diamond {
+  font-size: 8px;
+  color: #D4A843;
+  line-height: 1;
+}
+
+.brand-season {
+  font-size: 11px;
+  font-weight: 600;
+  color: #A8C5B0;
+  letter-spacing: 2.5px;
+}
+
+/* ============================================
+   Stats Section
+   ============================================ */
+
+.stats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #A8C5B0;
+  letter-spacing: 1.5px;
+}
+
+.stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: #D4A843;
+}
+
+.stats-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.next-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.next-game-date {
+  font-size: 18px;
+  font-weight: 600;
+  color: #D4A843;
+}
+
+/* ============================================
+   Navigation Cards
+   ============================================ */
+
+.nav-cards {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.nav-card {
+  display: flex;
+  align-items: center;
+  min-height: 76px;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, #1A3D2C 0%, #163528 100%);
+  border: 1px solid rgba(212, 168, 67, 0.15);
+  border-left: 2px solid #D4A843;
+  border-radius: 14px;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-card:active {
+  background: linear-gradient(135deg, #1F4A35 0%, #1B3F30 100%);
+}
+
+.nav-card:active .card-arrow {
+  opacity: 1;
+}
+
+.card-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 168, 67, 0.08);
+  border: 1.5px solid rgba(212, 168, 67, 0.3);
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 700;
+  color: #D4A843;
+  flex-shrink: 0;
+}
+
+.card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-left: 14px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #FFFFFF;
+  text-align: left;
+}
+
+.card-subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  color: #A8C5B0;
+  text-align: left;
+}
+
+.card-arrow {
+  font-size: 18px;
+  color: #D4A843;
+  opacity: 0.6;
+  margin-left: auto;
+  transition: opacity 0.2s ease;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+
+.home-footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.home-footer span {
+  font-size: 11px;
+  color: #A8C5B0;
+  opacity: 0.2;
+}
