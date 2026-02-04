@@ -1,0 +1,384 @@
+/* ============================================
+   Leaderboard Screen
+   ============================================ */
+
+.leaderboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 20px;
+}
+
+/* Loading, Error, Empty States */
+.leaderboard-loading,
+.leaderboard-error,
+.leaderboard-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  color: #A8C5B0;
+  font-size: 16px;
+  gap: 8px;
+}
+
+.leaderboard-error {
+  color: #E57373;
+}
+
+.leaderboard-empty p {
+  margin: 0;
+}
+
+/* ============================================
+   Season Summary Card
+   ============================================ */
+
+.season-card {
+  background: #1A3A2A;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(212, 168, 67, 0.15);
+}
+
+.season-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #D4A843;
+  letter-spacing: 3px;
+  text-align: center;
+  margin: 0 0 16px 0;
+}
+
+.season-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.season-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.season-stat-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: #A8C5B0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.season-stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #D4A843;
+}
+
+.season-stat-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Leaderboard Table
+   ============================================ */
+
+.leaderboard-table {
+  display: flex;
+  flex-direction: column;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+/* Shared grid layout for header and rows */
+.leaderboard-header,
+.player-row {
+  display: grid;
+  grid-template-columns: 30px minmax(80px, 1fr) 70px 60px 50px;
+  column-gap: 8px;
+  align-items: center;
+  padding: 12px 16px;
+}
+
+/* Sticky Header */
+.leaderboard-header {
+  background: #0F2419;
+  position: sticky;
+  top: calc(env(safe-area-inset-top, 0px) + 16px);
+  z-index: 10;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.leaderboard-header span {
+  font-size: 10px;
+  font-weight: 600;
+  color: #A8C5B0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Column alignment */
+.col-rank {
+  text-align: left;
+}
+
+.col-name {
+  text-align: left;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.col-winnings {
+  text-align: right;
+}
+
+.col-pl {
+  text-align: right;
+}
+
+.col-played {
+  text-align: center;
+}
+
+/* Player name with badge */
+.player-row .col-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.player-name-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* Qualified Badge */
+.qualified-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: #D4A843;
+  color: #1A1A1A;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Player Rows
+   ============================================ */
+
+.leaderboard-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-row-wrapper {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.player-row {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-left: 3px solid transparent;
+  transition: background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+.player-row:active {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Top 3 Premium Styling */
+.player-row.top-three {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.player-row.gold {
+  border-left-color: #D4A843;
+}
+
+.player-row.silver {
+  border-left-color: #C0C0C0;
+}
+
+.player-row.bronze {
+  border-left-color: #CD7F32;
+}
+
+/* Rank Badges for Top 3 */
+.rank-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.rank-badge.gold {
+  background: linear-gradient(135deg, #FFD700 0%, #D4A843 50%, #B8922E 100%);
+  color: #1A1A1A;
+}
+
+.rank-badge.silver {
+  background: linear-gradient(135deg, #C0C0C0 0%, #A8A8A8 50%, #8C8C8C 100%);
+  color: #1A1A1A;
+}
+
+.rank-badge.bronze {
+  background: linear-gradient(135deg, #CD7F32 0%, #B87333 50%, #A0522D 100%);
+  color: #1A1A1A;
+}
+
+/* Row Text Styles */
+.player-row .col-rank {
+  font-size: 13px;
+  color: #6B8B7A;
+}
+
+.player-row.top-three .col-rank {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.player-row .col-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #FFFFFF;
+}
+
+.player-row .col-name .player-name-text {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+
+.player-row.top-three .col-name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.player-row .col-winnings {
+  font-size: 14px;
+  font-weight: 600;
+  color: #D4A843;
+}
+
+.player-row.top-three .col-winnings {
+  font-size: 15px;
+}
+
+.player-row .col-pl {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.player-row.top-three .col-pl {
+  font-size: 13px;
+}
+
+.player-row .col-pl.positive {
+  color: #4CAF50;
+}
+
+.player-row .col-pl.negative {
+  color: #E57373;
+}
+
+.player-row .col-pl.zero {
+  color: #6B8B7A;
+}
+
+.player-row .col-played {
+  font-size: 13px;
+  color: #A8C5B0;
+}
+
+.player-row.top-three .col-played {
+  font-size: 14px;
+}
+
+/* ============================================
+   Expanded Player Details
+   ============================================ */
+
+.player-details {
+  padding: 12px 16px 16px 47px;
+  background: rgba(26, 58, 42, 0.5);
+  animation: slideDown 0.15s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.detail-label {
+  font-size: 13px;
+  color: #A8C5B0;
+}
+
+.detail-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.detail-value.qualified {
+  color: #4CAF50;
+}
+
+.qualification-row {
+  margin-bottom: 8px;
+}
+
+/* Qualification Progress Bar */
+.qualification-bar-container {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.qualification-bar-fill {
+  height: 100%;
+  background: #D4A843;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.qualification-bar-fill.qualified {
+  background: #4CAF50;
+}
