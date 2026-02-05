@@ -73,6 +73,7 @@ function GameDetailScreen() {
   const [thirdPrize, setThirdPrize] = useState(0)
   const [potAmount, setPotAmount] = useState(0)
   const [prizesAdjusted, setPrizesAdjusted] = useState(false)
+  const [validationOverride, setValidationOverride] = useState(false)
   const [savingWinners, setSavingWinners] = useState(false)
   const [winnersError, setWinnersError] = useState(null)
 
@@ -272,7 +273,8 @@ function GameDetailScreen() {
   // Prize validation for add winners
   const prizeTotal = firstPrize + secondPrize + thirdPrize + potAmount
   const expectedTotal = game?.attendance_count * 20
-  const prizesValid = prizeTotal === expectedTotal
+  const prizeTotalsMatch = prizeTotal === expectedTotal
+  const prizesValid = prizeTotalsMatch || validationOverride
 
   // Filter available players for winner dropdowns
   const availableForFirst = useMemo(() => {
@@ -324,6 +326,7 @@ function GameDetailScreen() {
           third_place_prize: thirdPrize,
           pot_amount: potAmount,
           prizes_adjusted: Boolean(prizesAdjusted),
+          validation_overridden: Boolean(validationOverride),
           is_complete: Boolean(willBeComplete)
         })
         .eq('id', id)
@@ -331,6 +334,7 @@ function GameDetailScreen() {
       if (updateError) throw updateError
 
       setHasUnsavedChanges(false)
+      setValidationOverride(false)
       await fetchGameData()
     } catch (err) {
       setWinnersError(err.message || 'Failed to save winners')
@@ -430,6 +434,7 @@ function GameDetailScreen() {
       setThirdPrize(game.third_place_prize || 0)
       setPotAmount(game.pot_amount || 0)
       setPrizesAdjusted(game.prizes_adjusted || false)
+      setValidationOverride(game.validation_overridden || false)
     } else {
       // Fetch prize chart for games without winners
       try {
@@ -452,6 +457,7 @@ function GameDetailScreen() {
         return
       }
       setPrizesAdjusted(false)
+      setValidationOverride(false)
     }
 
     // Pre-populate attendees from existing records
@@ -567,6 +573,7 @@ function GameDetailScreen() {
         updateData.third_place_prize = thirdPrize
         updateData.pot_amount = potAmount
         updateData.prizes_adjusted = Boolean(prizesAdjusted)
+        updateData.validation_overridden = Boolean(validationOverride)
       }
 
       // Update is_complete status
@@ -843,14 +850,37 @@ function GameDetailScreen() {
                   <div className="prize-expected">
                     Expected: £{expectedTotal}
                   </div>
-                  {prizesValid ? (
+                  {prizeTotalsMatch ? (
                     <span className="validation-check">✓</span>
+                  ) : validationOverride ? (
+                    <span className="validation-override-badge">Manual override</span>
                   ) : (
                     <span className="validation-error">
                       Prizes must equal {game.attendance_count} × £20
                     </span>
                   )}
                 </div>
+
+                {/* Override toggle - show when prizes don't match */}
+                {!prizeTotalsMatch && (
+                  <div className="override-toggle-row">
+                    <button
+                      className={`toggle small ${validationOverride ? 'on' : 'off'}`}
+                      onClick={() => {
+                        setValidationOverride(!validationOverride)
+                        setHasUnsavedChanges(true)
+                      }}
+                    >
+                      <span className="toggle-label">Override validation</span>
+                      <span className="toggle-track">
+                        <span className="toggle-thumb" />
+                      </span>
+                    </button>
+                    {validationOverride && (
+                      <span className="override-hint">Prizes will be saved as entered</span>
+                    )}
+                  </div>
+                )}
               </div>
 
               {!isEditMode && (
@@ -892,6 +922,12 @@ function GameDetailScreen() {
             )}
             {game.prizes_adjusted && (
               <div className="stat-note">Prizes were manually adjusted</div>
+            )}
+            {game.validation_overridden && (
+              <div className="stat-note override-note">
+                <span className="validation-override-badge">Manual override</span>
+                <span>Validation was overridden</span>
+              </div>
             )}
           </div>
         </section>

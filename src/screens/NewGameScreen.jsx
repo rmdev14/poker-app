@@ -89,6 +89,7 @@ function NewGameScreen() {
   const [thirdPrize, setThirdPrize] = useState(50)
   const [potAmount, setPotAmount] = useState(60)
   const [prizesAdjusted, setPrizesAdjusted] = useState(false)
+  const [validationOverride, setValidationOverride] = useState(false)
 
   // Attendance selection state
   const [addAttendeesNow, setAddAttendeesNow] = useState(true)
@@ -232,7 +233,8 @@ function NewGameScreen() {
   // Validation
   const prizeTotal = firstPrize + secondPrize + thirdPrize + potAmount
   const expectedTotal = attendanceCount * 20
-  const prizesValid = prizeTotal === expectedTotal
+  const prizeTotalsMatch = prizeTotal === expectedTotal
+  const prizesValid = prizeTotalsMatch || validationOverride
 
   const isFormValid = useMemo(() => {
     const basicValid = gameDate && attendanceCount >= 12 && attendanceCount <= 36
@@ -316,6 +318,7 @@ function NewGameScreen() {
         gameData.third_place_prize = thirdPrize
         gameData.pot_amount = potAmount
         gameData.prizes_adjusted = Boolean(prizesAdjusted)
+        gameData.validation_overridden = Boolean(validationOverride)
       } else {
         gameData.first_place_player_id = null
         gameData.first_place_prize = null
@@ -582,8 +585,10 @@ function NewGameScreen() {
                 Expected: £{expectedTotal}
               </div>
               {addWinnersNow && (
-                prizesValid ? (
+                prizeTotalsMatch ? (
                   <span className="validation-check">✓</span>
+                ) : validationOverride ? (
+                  <span className="validation-override-badge">Manual override</span>
                 ) : (
                   <span className="validation-error">
                     Prizes must equal {attendanceCount} × £20
@@ -591,6 +596,24 @@ function NewGameScreen() {
                 )
               )}
             </div>
+
+            {/* Override toggle - show when prizes don't match and winners are being added */}
+            {addWinnersNow && !prizeTotalsMatch && (
+              <div className="override-toggle-row">
+                <button
+                  className={`toggle small ${validationOverride ? 'on' : 'off'}`}
+                  onClick={() => setValidationOverride(!validationOverride)}
+                >
+                  <span className="toggle-label">Override validation</span>
+                  <span className="toggle-track">
+                    <span className="toggle-thumb" />
+                  </span>
+                </button>
+                {validationOverride && (
+                  <span className="override-hint">Prizes will be saved as entered</span>
+                )}
+              </div>
+            )}
           </div>
         </section>
 
