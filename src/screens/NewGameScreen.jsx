@@ -315,7 +315,7 @@ function NewGameScreen() {
         gameData.third_place_player_id = thirdPlace
         gameData.third_place_prize = thirdPrize
         gameData.pot_amount = potAmount
-        gameData.prizes_adjusted = prizesAdjusted
+        gameData.prizes_adjusted = Boolean(prizesAdjusted)
       } else {
         gameData.first_place_player_id = null
         gameData.first_place_prize = null
@@ -357,10 +357,14 @@ function NewGameScreen() {
         } else {
           // Mark game as complete if we have both winners and attendees
           if (addWinnersNow) {
-            await supabase
+            const { error: completeError } = await supabase
               .from('game_nights')
               .update({ is_complete: true })
               .eq('id', insertedGame.id)
+
+            if (completeError) {
+              console.error('Failed to mark game as complete:', completeError)
+            }
           }
         }
       }

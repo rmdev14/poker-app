@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../context/AuthContext'
 import './PlayerChipsSelector.css'
 
 function PlayerChipsSelector({
@@ -11,12 +12,17 @@ function PlayerChipsSelector({
   targetCount = null,
   showCounter = true
 }) {
+  const { isAdmin } = useAuth()
   const [showAddPlayer, setShowAddPlayer] = useState(false)
   const [newPlayerName, setNewPlayerName] = useState('')
   const [addingPlayer, setAddingPlayer] = useState(false)
   const [addPlayerError, setAddPlayerError] = useState(null)
 
   async function handleAddPlayer() {
+    if (!isAdmin) {
+      setAddPlayerError('Admin login required')
+      return
+    }
     if (!newPlayerName.trim() || addingPlayer) return
 
     try {
@@ -96,6 +102,7 @@ function PlayerChipsSelector({
             placeholder="Player name"
             value={newPlayerName}
             onChange={(e) => setNewPlayerName(e.target.value)}
+            maxLength={50}
             autoFocus
           />
           <div className="add-player-buttons">

@@ -86,9 +86,6 @@ function GameDetailScreen() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const [showUnsavedModal, setShowUnsavedModal] = useState(false)
 
-  // Track initial state for comparison
-  const [initialAttendees, setInitialAttendees] = useState(new Set())
-
   useEffect(() => {
     fetchGameData()
   }, [id])
@@ -195,6 +192,10 @@ function GameDetailScreen() {
   const attendanceValid = selectedAttendees.size === game?.attendance_count
 
   async function handleCompleteAttendance() {
+    if (!isAdmin) {
+      setError('Admin login required')
+      return
+    }
     if (!attendanceValid || saving) return
 
     try {
@@ -234,6 +235,10 @@ function GameDetailScreen() {
 
   // Handle adding new player
   async function handleAddPlayer() {
+    if (!isAdmin) {
+      setAddPlayerError('Admin login required')
+      return
+    }
     if (!newPlayerName.trim() || addingPlayer) return
 
     try {
@@ -295,6 +300,10 @@ function GameDetailScreen() {
   }, [firstPlace, secondPlace, thirdPlace, prizesValid])
 
   async function handleSaveWinners() {
+    if (!isAdmin) {
+      setWinnersError('Admin login required')
+      return
+    }
     if (!winnersFormValid || savingWinners) return
 
     try {
@@ -354,16 +363,23 @@ function GameDetailScreen() {
   }
 
   async function handleDelete() {
+    if (!isAdmin) {
+      setError('Admin login required')
+      setShowDeleteModal(false)
+      return
+    }
     if (deleting) return
 
     try {
       setDeleting(true)
 
       // Delete attendances first (foreign key constraint)
-      await supabase
+      const { error: attendanceDeleteError } = await supabase
         .from('attendances')
         .delete()
         .eq('game_night_id', id)
+
+      if (attendanceDeleteError) throw attendanceDeleteError
 
       // Delete the game
       const { error: deleteError } = await supabase
@@ -416,17 +432,24 @@ function GameDetailScreen() {
       setPrizesAdjusted(game.prizes_adjusted || false)
     } else {
       // Fetch prize chart for games without winners
-      const { data: prizeData } = await supabase
-        .from('prize_chart')
-        .select('*')
-        .eq('num_players', game.attendance_count)
-        .single()
+      try {
+        const { data: prizeData, error: prizeError } = await supabase
+          .from('prize_chart')
+          .select('*')
+          .eq('num_players', game.attendance_count)
+          .single()
 
-      if (prizeData) {
-        setFirstPrize(prizeData.first_prize)
-        setSecondPrize(prizeData.second_prize)
-        setThirdPrize(prizeData.third_prize)
-        setPotAmount(prizeData.pot)
+        if (prizeError) throw prizeError
+
+        if (prizeData) {
+          setFirstPrize(prizeData.first_prize)
+          setSecondPrize(prizeData.second_prize)
+          setThirdPrize(prizeData.third_prize)
+          setPotAmount(prizeData.pot)
+        }
+      } catch (err) {
+        setEditError('Failed to load prize chart')
+        return
       }
       setPrizesAdjusted(false)
     }
@@ -518,6 +541,10 @@ function GameDetailScreen() {
 
   // Save edit changes
   async function handleSaveEdit() {
+    if (!isAdmin) {
+      setEditError('Admin login required')
+      return
+    }
     if (!editFormValid || savingEdit) return
 
     try {

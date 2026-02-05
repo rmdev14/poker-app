@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import './UpdateToast.css'
 
 function UpdateToast() {
   const [showToast, setShowToast] = useState(false)
+  const intervalRef = useRef(null)
 
   const {
     needRefresh: [needRefresh],
@@ -12,12 +13,21 @@ function UpdateToast() {
     onRegisteredSW(swUrl, r) {
       // Check for updates every 60 seconds
       if (r) {
-        setInterval(() => {
+        intervalRef.current = setInterval(() => {
           r.update()
         }, 60 * 1000)
       }
     }
   })
+
+  // Cleanup interval on unmount
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (needRefresh) {

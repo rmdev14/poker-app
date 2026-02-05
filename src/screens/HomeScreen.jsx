@@ -72,6 +72,15 @@ function HomeScreen() {
     }
   }
 
+  // Cleanup triple-tap timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (tapTimerRef.current) {
+        clearTimeout(tapTimerRef.current)
+      }
+    }
+  }, [])
+
   useEffect(() => {
     async function fetchHomeData() {
       try {
