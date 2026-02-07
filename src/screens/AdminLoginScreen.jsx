@@ -30,7 +30,7 @@ function AdminLoginScreen() {
       await signIn(email, password)
       navigate('/')
     } catch (err) {
-      setError(err.message || 'Failed to sign in')
+      setError('Invalid email or password')
     } finally {
       setLoading(false)
     }

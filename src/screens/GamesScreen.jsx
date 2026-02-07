@@ -88,7 +88,7 @@ function GamesScreen() {
       )
       setGamesWithAttendees(gameIdsWithAttendees)
     } catch (err) {
-      setError(err.message || 'Failed to load games')
+      setError('Failed to load games')
     } finally {
       setLoading(false)
     }

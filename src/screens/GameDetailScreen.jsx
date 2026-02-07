@@ -161,7 +161,7 @@ function GameDetailScreen() {
         }
       }
     } catch (err) {
-      setError(err.message || 'Failed to load game')
+      setError('Failed to load game')
     } finally {
       setLoading(false)
     }
@@ -228,7 +228,7 @@ function GameDetailScreen() {
       setHasUnsavedChanges(false)
       await fetchGameData()
     } catch (err) {
-      setError(err.message || 'Failed to save attendance')
+      setError('Failed to save attendance')
     } finally {
       setSaving(false)
     }
@@ -264,7 +264,10 @@ function GameDetailScreen() {
       setNewPlayerName('')
       setShowAddPlayer(false)
     } catch (err) {
-      setAddPlayerError(err.message || 'Failed to add player')
+      const message = err.message === 'Player already exists'
+        ? err.message
+        : 'Failed to add player'
+      setAddPlayerError(message)
     } finally {
       setAddingPlayer(false)
     }
@@ -337,7 +340,7 @@ function GameDetailScreen() {
       setValidationOverride(false)
       await fetchGameData()
     } catch (err) {
-      setWinnersError(err.message || 'Failed to save winners')
+      setWinnersError('Failed to save winners')
     } finally {
       setSavingWinners(false)
     }
@@ -395,7 +398,7 @@ function GameDetailScreen() {
 
       navigate('/games')
     } catch (err) {
-      setError(err.message || 'Failed to delete game')
+      setError('Failed to delete game')
       setShowDeleteModal(false)
     } finally {
       setDeleting(false)
@@ -614,7 +617,7 @@ function GameDetailScreen() {
       setHasUnsavedChanges(false)
       await fetchGameData()
     } catch (err) {
-      setEditError(err.message || 'Failed to save changes')
+      setEditError('Failed to save changes')
     } finally {
       setSavingEdit(false)
     }
@@ -763,6 +766,7 @@ function GameDetailScreen() {
                     placeholder="Player name"
                     value={newPlayerName}
                     onChange={(e) => setNewPlayerName(e.target.value)}
+                    maxLength={50}
                     autoFocus
                   />
                   <div className="add-player-buttons">

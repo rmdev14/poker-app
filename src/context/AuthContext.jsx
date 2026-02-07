@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
   const value = {
     user,
     loading,
-    isAdmin: !!user,
+    isAdmin: user?.email === 'admin@poker.com',
     signIn,
     signOut
   }

@@ -129,7 +129,7 @@ function NewGameScreen() {
         await fetchPrizeChart(18)
 
       } catch (err) {
-        setError(err.message || 'Failed to load data')
+        setError('Failed to load data')
       } finally {
         setLoading(false)
       }
@@ -374,7 +374,10 @@ function NewGameScreen() {
 
       navigate('/games')
     } catch (err) {
-      setSaveError(err.message || 'Failed to save game night')
+      const message = err.message === 'A game night already exists for this date'
+        ? err.message
+        : 'Failed to save game night'
+      setSaveError(message)
     } finally {
       setSaving(false)
     }

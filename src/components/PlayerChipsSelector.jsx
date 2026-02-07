@@ -49,7 +49,10 @@ function PlayerChipsSelector({
       setNewPlayerName('')
       setShowAddPlayer(false)
     } catch (err) {
-      setAddPlayerError(err.message || 'Failed to add player')
+      const message = err.message === 'Player already exists'
+        ? err.message
+        : 'Failed to add player'
+      setAddPlayerError(message)
     } finally {
       setAddingPlayer(false)
     }
