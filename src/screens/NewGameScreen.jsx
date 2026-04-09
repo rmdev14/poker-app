@@ -162,11 +162,18 @@ function NewGameScreen() {
   }
 
   function handleAttendanceChange(delta) {
-    const newCount = Math.min(36, Math.max(12, attendanceCount + delta))
+    const newCount = Math.min(36, Math.max(1, attendanceCount + delta))
     if (newCount !== attendanceCount) {
       setAttendanceCount(newCount)
       setPrizesAdjusted(false)
-      fetchPrizeChart(newCount)
+      if (newCount >= 12) {
+        fetchPrizeChart(newCount)
+      } else {
+        setFirstPrize(0)
+        setSecondPrize(0)
+        setThirdPrize(0)
+        setPotAmount(0)
+      }
     }
   }
 
@@ -237,7 +244,7 @@ function NewGameScreen() {
   const prizesValid = prizeTotalsMatch || validationOverride
 
   const isFormValid = useMemo(() => {
-    const basicValid = gameDate && attendanceCount >= 12 && attendanceCount <= 36
+    const basicValid = gameDate && attendanceCount >= 1 && attendanceCount <= 36
 
     if (!addWinnersNow) {
       return basicValid
@@ -441,7 +448,7 @@ function NewGameScreen() {
             <button
               className="attendance-btn"
               onClick={() => handleAttendanceChange(-1)}
-              disabled={attendanceCount <= 12}
+              disabled={attendanceCount <= 1}
             >
               −
             </button>
