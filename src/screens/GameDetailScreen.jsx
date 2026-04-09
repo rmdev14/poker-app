@@ -60,6 +60,7 @@ function GameDetailScreen() {
 
   // Edit mode state
   const [isEditMode, setIsEditMode] = useState(false)
+  const [editGameDate, setEditGameDate] = useState('')
   const [editSelectedAttendees, setEditSelectedAttendees] = useState(new Set())
   const [savingEdit, setSavingEdit] = useState(false)
   const [editError, setEditError] = useState(null)
@@ -425,6 +426,9 @@ function GameDetailScreen() {
 
   // Enter edit mode
   async function enterEditMode() {
+    // Pre-populate date
+    setEditGameDate(game.game_date)
+
     // Pre-populate winners
     setFirstPlace(game.first_place_player_id || '')
     setSecondPlace(game.second_place_player_id || '')
@@ -532,6 +536,8 @@ function GameDetailScreen() {
 
   // Edit form validation
   const editFormValid = useMemo(() => {
+    if (!editGameDate) return false
+
     const hasWinnersData = game?.first_place_player_id !== null
     const hasAttendeesData = attendees.length > 0
 
@@ -546,7 +552,7 @@ function GameDetailScreen() {
     }
 
     return true
-  }, [game, attendees, firstPlace, secondPlace, thirdPlace, winnersFormValid, editSelectedAttendees, editAttendanceValid])
+  }, [editGameDate, game, attendees, firstPlace, secondPlace, thirdPlace, winnersFormValid, editSelectedAttendees, editAttendanceValid])
 
   // Save edit changes
   async function handleSaveEdit() {
@@ -563,7 +569,9 @@ function GameDetailScreen() {
       const hasWinners = game.first_place_player_id !== null
 
       // Update game data
-      const updateData = {}
+      const updateData = {
+        game_date: editGameDate
+      }
 
       // Always update winners if we're editing them
       const willHaveWinners = !!(firstPlace && secondPlace && thirdPlace)
@@ -666,7 +674,19 @@ function GameDetailScreen() {
       <div className={`game-detail-content ${showStickyButton ? 'has-sticky-button' : ''}`}>
         {/* Game Date Header */}
         <div className="detail-header">
-          <h2 className="detail-date">{formatGameDate(game.game_date)}</h2>
+          {isEditMode ? (
+            <input
+              type="date"
+              className="edit-date-input"
+              value={editGameDate}
+              onChange={(e) => {
+                setEditGameDate(e.target.value)
+                setHasUnsavedChanges(true)
+              }}
+            />
+          ) : (
+            <h2 className="detail-date">{formatGameDate(game.game_date)}</h2>
+          )}
           <span className={`status-badge ${status.className}`}>
             {status.label}
           </span>

@@ -45,6 +45,17 @@
   color: #FFFFFF;
 }
 
+.edit-date-input {
+  font-size: 18px;
+  font-weight: 600;
+  color: #FFFFFF;
+  background: #2A4235;
+  border: 1.5px solid #3D5A4A;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color-scheme: dark;
+}
+
 .status-badge {
   padding: 6px 12px;
   font-size: 11px;
