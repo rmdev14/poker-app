@@ -417,7 +417,13 @@
   color: #FFFFFF;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  margin-bottom: 20px;
+  margin-bottom: 4px;
+}
+
+.winners-subtitle {
+  font-size: 13px;
+  color: #D4A843;
+  margin-bottom: 12px;
 }
 
 .winners-podium {

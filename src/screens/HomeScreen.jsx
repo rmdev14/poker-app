@@ -270,16 +270,17 @@ function HomeScreen() {
 
       {/* Previous Winners */}
       <section className="winners">
-        <span className="winners-title">
-          {lastGameWithWinners?.game_date
-            ? (() => {
-                const d = new Date(lastGameWithWinners.game_date + 'T00:00:00')
-                const day = d.getDate()
-                const month = d.toLocaleDateString('en-GB', { month: 'long' })
-                return `PREVIOUS WINNERS (Last Updated: ${day}${getOrdinalSuffix(day)} ${month})`
-              })()
-            : 'PREVIOUS WINNERS'}
-        </span>
+        <span className="winners-title">PREVIOUS WINNERS</span>
+        {lastGameWithWinners?.game_date && (() => {
+          const d = new Date(lastGameWithWinners.game_date + 'T00:00:00')
+          const day = d.getDate()
+          const month = d.toLocaleDateString('en-GB', { month: 'long' })
+          return (
+            <span className="winners-subtitle">
+              Last Updated: {day}{getOrdinalSuffix(day)} {month}
+            </span>
+          )
+        })()}
         {loading ? (
           <div className="winners-loading">Loading...</div>
         ) : lastGameWithWinners ? (
