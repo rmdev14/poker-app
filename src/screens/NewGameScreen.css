@@ -399,35 +399,34 @@
   border-radius: 12px;
 }
 
-.override-toggle-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 16px;
+.override-btn-row {
   width: 100%;
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.toggle.small .toggle-track {
-  width: 36px;
-  height: 20px;
-  border-radius: 10px;
-}
-
-.toggle.small .toggle-thumb {
-  width: 16px;
-  height: 16px;
-}
-
-.toggle.small.on .toggle-thumb {
-  transform: translateX(16px);
-}
-
-.override-hint {
-  font-size: 12px;
+.override-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
   color: #E8A735;
+  background: transparent;
+  border: 1.5px dashed #E8A735;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-style 0.2s ease;
+}
+
+.override-btn:hover {
+  background: rgba(232, 167, 53, 0.1);
+}
+
+.override-btn.active {
+  color: #E8A735;
+  background: rgba(232, 167, 53, 0.15);
+  border-style: solid;
 }
 
 /* ============================================

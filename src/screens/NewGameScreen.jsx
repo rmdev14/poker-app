@@ -318,7 +318,7 @@ function NewGameScreen() {
         gameData.third_place_prize = thirdPrize
         gameData.pot_amount = potAmount
         gameData.prizes_adjusted = Boolean(prizesAdjusted)
-        gameData.validation_overridden = Boolean(validationOverride)
+        gameData.validation_overridden = Boolean(!prizeTotalsMatch && validationOverride)
       } else {
         gameData.first_place_player_id = null
         gameData.first_place_prize = null
@@ -600,21 +600,15 @@ function NewGameScreen() {
               )}
             </div>
 
-            {/* Override toggle - show when prizes don't match and winners are being added */}
-            {addWinnersNow && !prizeTotalsMatch && (
-              <div className="override-toggle-row">
+            {/* Override button - show when prizes don't match, admin only */}
+            {addWinnersNow && !prizeTotalsMatch && isAdmin && (
+              <div className="override-btn-row">
                 <button
-                  className={`toggle small ${validationOverride ? 'on' : 'off'}`}
+                  className={`override-btn ${validationOverride ? 'active' : ''}`}
                   onClick={() => setValidationOverride(!validationOverride)}
                 >
-                  <span className="toggle-label">Override validation</span>
-                  <span className="toggle-track">
-                    <span className="toggle-thumb" />
-                  </span>
+                  {validationOverride ? '✓ Mismatch Confirmed' : 'Override — Confirm Mismatch'}
                 </button>
-                {validationOverride && (
-                  <span className="override-hint">Prizes will be saved as entered</span>
-                )}
               </div>
             )}
           </div>

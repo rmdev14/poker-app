@@ -329,7 +329,7 @@ function GameDetailScreen() {
           third_place_prize: thirdPrize,
           pot_amount: potAmount,
           prizes_adjusted: Boolean(prizesAdjusted),
-          validation_overridden: Boolean(validationOverride),
+          validation_overridden: Boolean(!prizeTotalsMatch && validationOverride),
           is_complete: Boolean(willBeComplete)
         })
         .eq('id', id)
@@ -576,7 +576,7 @@ function GameDetailScreen() {
         updateData.third_place_prize = thirdPrize
         updateData.pot_amount = potAmount
         updateData.prizes_adjusted = Boolean(prizesAdjusted)
-        updateData.validation_overridden = Boolean(validationOverride)
+        updateData.validation_overridden = Boolean(!prizeTotalsMatch && validationOverride)
       }
 
       // Update is_complete status
@@ -865,24 +865,18 @@ function GameDetailScreen() {
                   )}
                 </div>
 
-                {/* Override toggle - show when prizes don't match */}
-                {!prizeTotalsMatch && (
-                  <div className="override-toggle-row">
+                {/* Override button - show when prizes don't match, admin only */}
+                {!prizeTotalsMatch && isAdmin && (
+                  <div className="override-btn-row">
                     <button
-                      className={`toggle small ${validationOverride ? 'on' : 'off'}`}
+                      className={`override-btn ${validationOverride ? 'active' : ''}`}
                       onClick={() => {
                         setValidationOverride(!validationOverride)
                         setHasUnsavedChanges(true)
                       }}
                     >
-                      <span className="toggle-label">Override validation</span>
-                      <span className="toggle-track">
-                        <span className="toggle-thumb" />
-                      </span>
+                      {validationOverride ? '✓ Mismatch Confirmed' : 'Override — Confirm Mismatch'}
                     </button>
-                    {validationOverride && (
-                      <span className="override-hint">Prizes will be saved as entered</span>
-                    )}
                   </div>
                 )}
               </div>
